@@ -1,0 +1,21 @@
+{
+  "name": "give-me-text",
+  "version": "1.0.0",
+  "description": "An interface to the Give Me Text online service.",
+  "main": "client.js",
+  "scripts": {
+    "test": "mocha --timeout 10000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/buchanan-edwards/give-me-text.git"
+  },
+  "author": "Buchanan & Edwards",
+  "license": "MIT",
+  "dependencies": {
+    "request": "^2.83.0"
+  },
+  "devDependencies": {
+    "mocha": "^4.0.1"
+  }
+}
