@@ -2,6 +2,8 @@
 
 A simple REST client for the [Give Me Text](http://givemetext.okfnlabs.org) service. This package exports a single function that returns a promise resolved with the detected type and extracted text of a document.
 
+Version 1.0.2
+
 ## Installation
 
 ```

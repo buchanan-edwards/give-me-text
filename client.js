@@ -101,8 +101,9 @@ function _request(options) {
         err.code = response.statusCode;
         err.body = body;
         reject(err);
+      } else {
+        resolve(body);
       }
-      resolve(body);
     });
   });
 }
