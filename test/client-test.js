@@ -1,6 +1,6 @@
 'use strict';
 
-const client = require('../client');
+const giveMeText = require('../client');
 const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
@@ -16,8 +16,7 @@ const documents = {
 };
 
 const types = {
-  word:
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  word: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   pdf: 'application/pdf',
   text: 'text/plain'
 };
@@ -28,55 +27,30 @@ function removeWhiteSpace(text) {
 
 const refText = removeWhiteSpace(documents.text.toString('utf8'));
 
-describe('client module', function() {
-  describe('detect function', function() {
-    describe('detect(<word document>)', function() {
-      it('should detect a word document', function() {
-        return client.detect(documents.word).then(type => {
-          assert.strictEqual(type, types.word);
-        });
-      });
-    });
-
-    describe('detect(<pdf document>)', function() {
-      it('should detect a pdf document', function() {
-        return client.detect(documents.pdf).then(type => {
-          assert.strictEqual(type, types.pdf);
-        });
-      });
-    });
-
-    describe('detect(<text document>)', function() {
-      it('should detect a text document', function() {
-        return client.detect(documents.text).then(type => {
-          assert.strictEqual(type, types.text);
-        });
+describe('give-me-text', function() {
+  describe('giveMeText(<word document>)', function() {
+    it('should detect and extract the text from a word document', function() {
+      return giveMeText(documents.word).then(result => {
+        assert.strictEqual(result.type, types.word);
+        assert.strictEqual(removeWhiteSpace(result.text), refText);
       });
     });
   });
 
-  describe('extract function', function() {
-    describe('extract(<word document>)', function() {
-      it('should extract the text from a word document', function() {
-        return client.extract(documents.word).then(text => {
-          assert.strictEqual(removeWhiteSpace(text), refText);
-        });
+  describe('giveMeText(<pdf document>)', function() {
+    it('should detect and extract the text from a pdf document', function() {
+      return giveMeText(documents.pdf).then(result => {
+        assert.strictEqual(result.type, types.pdf);
+        assert.strictEqual(removeWhiteSpace(result.text), refText);
       });
     });
+  });
 
-    describe('extract(<pdf document>)', function() {
-      it('should extract the text from a pdf document', function() {
-        return client.extract(documents.pdf).then(text => {
-          assert.strictEqual(removeWhiteSpace(text), refText);
-        });
-      });
-    });
-
-    describe('extract(<text document>)', function() {
-      it('should extract the text from a text document', function() {
-        return client.extract(documents.text).then(text => {
-          assert.strictEqual(removeWhiteSpace(text), refText);
-        });
+  describe('giveMeText(<text document>)', function() {
+    it('should detect and extract the text from a text document', function() {
+      return giveMeText(documents.text).then(result => {
+        assert.strictEqual(result.type, types.text);
+        assert.strictEqual(removeWhiteSpace(result.text), refText);
       });
     });
   });

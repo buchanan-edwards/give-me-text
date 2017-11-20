@@ -1,6 +1,6 @@
 # give-me-text
 
-A simple REST client for the [Give Me Text](http://givemetext.okfnlabs.org) service. This package provides functions that detect the MIME type of a document and extract the text from a document.
+A simple REST client for the [Give Me Text](http://givemetext.okfnlabs.org) service. This package exports a single function that returns a promise resolved with the detected type and extracted text of a document.
 
 ## Installation
 
@@ -11,26 +11,43 @@ npm install --save give-me-text
 ## Usage
 
 ```javascript
-const client = require('give-me-text');
+const giveMeText = require('give-me-text');
 
-client.extract(wordDocument).then(text => {
-  console.log(text);
-})
+giveMeText(myDocument).then(result => {
+  console.log(result.type);
+  console.log(result.text);
+}).catch(err => {
+  console.error(err);
+});
 ```
 
 ## API
 
-```javascript
-client.detect(document)
-```
+### `giveMeText(document)` or `giveMeText(document, hint)`
 
-Determines the MIME type of the document. Returns a promise that is resolved with the type (e.g., `application/pdf`). The `document` parameter can be a string or a Buffer.
+Given a document, it will detect the media type and extract the text. Returns a promise that is resolved with an object having two string properties: `type` and `text`. The `hint` parameter is optional. If specified, it can be a filename (this helps with media type detection) or an explicit media type (e.g., `application/pdf`). The `document` parameter can be a string or a Buffer.
 
 ```javascript
-client.extract(document [, type])
+// Case 1: without a hint.
+giveMeText(myDocument).then(result => {
+  console.log(result.type);
+  console.log(result.text);
+});
+
+// Case 2: with a filename hint.
+client.detect(myDocument, 'my-document.pdf').then(result => {
+  console.log(result.type);
+  console.log(result.text);
+});
+
+// Case 3: with an explicit media type.
+client.detect(myDocument, 'application/pdf').then(result => {
+  console.log(result.type); // set to the value of the hint
+  console.log(result.text);
+});
 ```
 
-Extracts the text from the document. Returns a promise that is resolved with the text. If the type is not specified, the `detect` function is called first to determine the type. The `document` parameter can be a string or a Buffer.
+In the first two cases, the media type of the document is detected by first submitting it to the `/detect/stream` service endpoint. In the last case, the `hint` is already a media type and the document is only submitted to the `/tika` service endpoint and the document type (the `hint`) is taken at face value.
 
 ## License
 
