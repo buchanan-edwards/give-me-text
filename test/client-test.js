@@ -12,13 +12,15 @@ function docpath(name) {
 const documents = {
   word: fs.readFileSync(docpath('test-document.docx')),
   pdf: fs.readFileSync(docpath('test-document.pdf')),
-  text: fs.readFileSync(docpath('test-document.txt'))
+  text: fs.readFileSync(docpath('test-document.txt')),
+  image: fs.readFileSync(docpath('test-document.png'))
 };
 
 const types = {
   word: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   pdf: 'application/pdf',
-  text: 'text/plain'
+  text: 'text/plain',
+  image: 'image/png'
 };
 
 function removeWhiteSpace(text) {
@@ -50,6 +52,15 @@ describe('give-me-text', function() {
     it('should detect and extract the text from a text document', function() {
       return giveMeText(documents.text).then(result => {
         assert.strictEqual(result.type, types.text);
+        assert.strictEqual(removeWhiteSpace(result.text), refText);
+      });
+    });
+  });
+
+  describe('giveMeText(<image>)', function() {
+    it('should detect and extract the text from an image', function() {
+      return giveMeText(documents.image).then(result => {
+        assert.strictEqual(result.type, types.image);
         assert.strictEqual(removeWhiteSpace(result.text), refText);
       });
     });

@@ -2,6 +2,10 @@
 
 ## Change Log
 
+### Version 1.0.3 (2017-11-21)
+
+- Added a test case for image OCR text extraction.
+
 ### Version 1.0.2 (2017-11-20)
 
 - Fixed an error in the _request function.
